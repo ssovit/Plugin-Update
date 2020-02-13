@@ -31,6 +31,19 @@ if (!class_exists('\WPPress\Update')) {
             }
         }
 
+        public static function add_notice($message = "", $type = "success", $btn = false)
+        {
+            echo "<div class=\"notice $type\">";
+            echo wpautop($message);
+            if (!empty($btn)) {
+
+                echo wpautop(sprintf('<a href="%s"" class="button-primary">%s</a>', $btn['url'], $btn['label']));
+
+            }
+            echo "</div>";
+
+        }
+
         public function check_info($def, $action, $arg)
         {
             if (!isset($arg->slug) || $arg->slug != $this->basename) {
@@ -75,7 +88,7 @@ if (!class_exists('\WPPress\Update')) {
             $query['wpp-item-id']      = $this->item_id;
             $query['wpp-item-update']  = '' != $this->license_key ? $this->license_key : '';
             $query['wpp-item-version'] = $this->version;
-            $query['wpp-site-url']     = Helper::maybeabsolute(site_url(), 'https://' . $_SERVER['HTTP_HOST']);
+            $query['wpp-site-url']     = self::maybeabsolute(site_url(), 'https://' . $_SERVER['HTTP_HOST']);
             $url                       = add_query_arg($query, self::SERVER);
 
             // Get the remote info
@@ -92,11 +105,32 @@ if (!class_exists('\WPPress\Update')) {
 
         public function license_nag()
         {
-            Helper::add_notice(sprintf(esc_html__("Enter valid license key for %s plugin", "facebook-events"), $this->plugin_name), "error", [
+            self::add_notice(sprintf(esc_html__("Enter valid license key for %s plugin", "facebook-events"), $this->plugin_name), "error", [
                 "url"   => $this->license_setting_page,
                 "label" => esc_html__("Enter License Key", "facebook-events"),
             ]);
 
+        }
+
+        public static function maybeabsolute($rel, $base)
+        {
+            if (parse_url($rel, PHP_URL_SCHEME) != '') {
+                return $rel;
+            }
+            if ($rel[0] == '#' || $rel[0] == '?') {
+                return $base . $rel;
+            }
+            $base = trailingslashit($base);
+            extract(parse_url($base));
+
+            $path = preg_replace('#/[^/]*$#', '', $path);
+            if ($rel[0] == '/') {
+                $path = '';
+            }
+            $abs = "$host$path/$rel";
+            $re  = ['#(/\.?/)#', '#/(?!\.\.)[^/]+/\.\./#'];
+            for ($n = 1; $n > 0; $abs = preg_replace($re, '/', $abs, -1, $n)) {}
+            return $scheme . '://' . $abs;
         }
 
         public function plugin_action_link($links)
