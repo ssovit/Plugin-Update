@@ -1,7 +1,7 @@
 <?php
-namespace WPPress;
+namespace WPPress_Updater;
 
-if (!class_exists('\WPPress\Update')) {
+if (!class_exists('\WPPress_Updater\Update')) {
     class Update
     {
         const SERVER = "https://wppress.net";
@@ -105,9 +105,9 @@ if (!class_exists('\WPPress\Update')) {
 
         public function license_nag()
         {
-            self::add_notice(sprintf(esc_html__("Enter valid license key for %s plugin", "facebook-events"), $this->plugin_name), "error", [
+            self::add_notice(sprintf(esc_html__("Enter valid license key for %s plugin", "wppress"), $this->plugin_name), "error", [
                 "url"   => $this->license_setting_page,
-                "label" => esc_html__("Enter License Key", "facebook-events"),
+                "label" => esc_html__("Enter License Key", "wppress"),
             ]);
 
         }

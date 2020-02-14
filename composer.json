@@ -28,7 +28,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"WPPress\\": "init/"
+			"WPPress_Updater\\": "init/"
 		}
 	}
 }
