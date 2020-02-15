@@ -2,16 +2,23 @@
 namespace Sovit;
 
 if (!class_exists('\Sovit\Update')) {
-    class Update
-    {
+    class Update {
         const SERVER = "https://wppress.net";
 
-        public function __construct($file, $plugin_name, $itemid, $version, $license_key, $license_setting_page)
-        {
+        /**
+         * @param $file
+         * @param $plugin_name
+         * @param $itemid
+         * @param $version
+         * @param $license_key
+         * @param $license_setting_page
+         */
+        public function __construct($file, $plugin_name, $itemid, $version, $license_key, $license_setting_page) {
             $this->version              = $version;
             $this->item_id              = $itemid;
             $this->basename             = \dirname(plugin_basename($file));
             $this->filename             = basename($file);
+            $this->file                 = $file;
             $this->license_key          = $license_key;
             $this->license_setting_page = $license_setting_page;
             $this->plugin_name          = $plugin_name;
@@ -28,11 +35,18 @@ if (!class_exists('\Sovit\Update')) {
                 add_action('admin_notices', [$this,
                     'license_nag',
                 ]);
+                add_action("after_plugin_row_" . plugin_basename($file), [$this, 'after_plugin_row'], 50, 2);
+
             }
+            //echo $this->filename; die();
         }
 
-        public static function add_notice($message = "", $type = "success", $btn = false)
-        {
+        /**
+         * @param $message
+         * @param $type
+         * @param $btn
+         */
+        public static function add_notice($message = "", $type = "success", $btn = false) {
             echo "<div class=\"notice $type\">";
             echo wpautop($message);
             if (!empty($btn)) {
@@ -44,8 +58,36 @@ if (!class_exists('\Sovit\Update')) {
 
         }
 
-        public function check_info($def, $action, $arg)
-        {
+        /**
+         * @param $file
+         * @param $plugin_data
+         */
+        public function after_plugin_row($file, $plugin_data) {
+
+            $wp_list_table = _get_list_table('WP_Plugins_List_Table');
+
+            printf(
+                '<tr class="plugin-update-tr active" id="%s" data-slug="%s" data-plugin="%s">' .
+                '<td colspan="%s" class="plugin-update colspanchange">' .
+                '<div class="update-message notice inline %s notice-alt"><p>',
+                esc_attr($this->basename . '-update-license-nag'),
+                esc_attr($this->basename),
+                esc_attr($file),
+                esc_attr($wp_list_table->get_column_count()),
+                "notice-warning"
+            );
+            echo "<a href=\"" . $this->license_setting_page . "\">" . esc_html__("Enter valid license key/purchase code to enable automatic update.") . "</a>";
+            echo "</p></td></tr>";
+
+        }
+
+        /**
+         * @param $def
+         * @param $action
+         * @param $arg
+         * @return mixed
+         */
+        public function check_info($def, $action, $arg) {
             if (!isset($arg->slug) || $arg->slug != $this->basename) {
                 return false;
             }
@@ -60,8 +102,11 @@ if (!class_exists('\Sovit\Update')) {
             return $def;
         }
 
-        public function check_update($transient)
-        {
+        /**
+         * @param $transient
+         * @return mixed
+         */
+        public function check_update($transient) {
             if (empty($transient->checked)) {
                 return $transient;
             }
@@ -81,8 +126,11 @@ if (!class_exists('\Sovit\Update')) {
             return $transient;
         }
 
-        public function get_update_data($give_array = false)
-        {
+        /**
+         * @param $give_array
+         * @return mixed
+         */
+        public function get_update_data($give_array = false) {
             $info                      = false;
             $query                     = [];
             $query['wpp-item-id']      = $this->item_id;
@@ -103,8 +151,7 @@ if (!class_exists('\Sovit\Update')) {
             return $info;
         }
 
-        public function license_nag()
-        {
+        public function license_nag() {
             self::add_notice(sprintf(esc_html__("Enter valid license key for %s plugin", "wppress"), $this->plugin_name), "error", [
                 "url"   => $this->license_setting_page,
                 "label" => esc_html__("Enter License Key", "wppress"),
@@ -112,8 +159,12 @@ if (!class_exists('\Sovit\Update')) {
 
         }
 
-        public static function maybeabsolute($rel, $base)
-        {
+        /**
+         * @param $rel
+         * @param $base
+         * @return mixed
+         */
+        public static function maybeabsolute($rel, $base) {
             if (parse_url($rel, PHP_URL_SCHEME) != '') {
                 return $rel;
             }
@@ -133,8 +184,11 @@ if (!class_exists('\Sovit\Update')) {
             return $scheme . '://' . $abs;
         }
 
-        public function plugin_action_link($links)
-        {
+        /**
+         * @param $links
+         * @return mixed
+         */
+        public function plugin_action_link($links) {
             $links[] = '<a href="' . $this->license_setting_page . '" style="font-weight:700; color:green;">' . esc_html__('Activate License') . '</a>';
 
             return $links;
