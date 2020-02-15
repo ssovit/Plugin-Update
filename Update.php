@@ -1,7 +1,7 @@
 <?php
-namespace WPPress_Updater;
+namespace Sovit;
 
-if (!class_exists('\WPPress_Updater\Update')) {
+if (!class_exists('\Sovit\Update')) {
     class Update
     {
         const SERVER = "https://wppress.net";

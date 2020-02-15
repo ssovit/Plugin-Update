@@ -1,5 +1,5 @@
 {
-	"name": "ssovit/wordpress-plugin-update",
+	"name": "ssovit/plugin-update",
 	"description": "WordPress Plugin updater for wppress.net",
 	"license": "GPL-2.0-only",
 	"homepage": "https://wppress.net/",
@@ -18,17 +18,14 @@
         }
     ],
 	"support": {
-		"source": "https://github.com/ssovit/WodPress-Plugin-Update",
-		"issues": "https://github.com/ssovit/WodPress-Plugin-Update/issues",
-		"docs": "https://github.com/ssovit/WodPress-Plugin-Update",
+		"source": "https://github.com/ssovit/Plugin-Update",
+		"issues": "https://github.com/ssovit/Plugin-Update/issues",
 		"email": "info@wppress.net"
 	},
 	"require": {
 		"php": ">=5.3"
 	},
 	"autoload": {
-		"psr-4": {
-			"WPPress_Updater\\": "init/"
-		}
+		"files": ["Update.php"]
 	}
 }
