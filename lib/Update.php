@@ -76,7 +76,7 @@ if (!class_exists('\Sovit\Update')) {
                 esc_attr($wp_list_table->get_column_count()),
                 "notice-warning"
             );
-            echo "<a href=\"" . $this->license_setting_page . "\">" . esc_html__("Enter valid license key/purchase code to enable automatic update.",'sovit') . "</a>";
+            echo "<a href=\"" . $this->license_setting_page . "\">" . esc_html__("Enter valid license key/purchase code to enable automatic update.") . "</a>";
             echo "</p></td></tr>";
 
         }
@@ -152,9 +152,9 @@ if (!class_exists('\Sovit\Update')) {
         }
 
         public function license_nag() {
-            self::add_notice(sprintf(esc_html__("Enter valid license key for %s plugin", "sovit"), $this->plugin_name), "error", [
+            self::add_notice(sprintf(esc_html__("Enter valid license key for %s plugin"), $this->plugin_name), "error", [
                 "url"   => $this->license_setting_page,
-                "label" => esc_html__("Enter License Key", "sovit"),
+                "label" => esc_html__("Enter License Key"),
             ]);
 
         }
