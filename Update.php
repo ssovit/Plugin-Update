@@ -152,7 +152,7 @@ if (!class_exists('\Sovit\Update')) {
         }
 
         public function license_nag() {
-            self::add_notice(sprintf(esc_html__("Enter valid license key for %s plugin"), $this->plugin_name), "error", [
+            self::add_notice(sprintf(esc_html__("Enter valid license key for %s"), $this->plugin_name), "error", [
                 "url"   => $this->license_setting_page,
                 "label" => esc_html__("Enter License Key"),
             ]);
