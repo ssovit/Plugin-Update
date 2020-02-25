@@ -17,17 +17,19 @@
 			"role": "Developer"
         }
     ],
+    "minimum-stability":"dev",
 	"support": {
 		"source": "https://github.com/ssovit/Plugin-Update",
 		"issues": "https://github.com/ssovit/Plugin-Update/issues",
 		"email": "info@wppress.net"
 	},
 	"require": {
-		"php": ">=5.3"
+		"php": ">=5.3",
+		"ssovit/helper":"dev-master"
 	},
 	"autoload": {
 		"psr-4": {
-			"Sovit\\": "./"
+			"Sovit\\": ""
 		}
 	}
 }

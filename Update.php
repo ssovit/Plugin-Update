@@ -42,23 +42,6 @@ if (!class_exists('\Sovit\Update')) {
         }
 
         /**
-         * @param $message
-         * @param $type
-         * @param $btn
-         */
-        public static function add_notice($message = "", $type = "success", $btn = false) {
-            echo "<div class=\"notice $type\">";
-            echo wpautop($message);
-            if (!empty($btn)) {
-
-                echo wpautop(sprintf('<a href="%s"" class="button-primary">%s</a>', $btn['url'], $btn['label']));
-
-            }
-            echo "</div>";
-
-        }
-
-        /**
          * @param $file
          * @param $plugin_data
          */
@@ -152,7 +135,7 @@ if (!class_exists('\Sovit\Update')) {
         }
 
         public function license_nag() {
-            self::add_notice(sprintf(esc_html__("Enter valid license key for %s"), $this->plugin_name), "error", [
+            \Sovit\Helper::add_notice(sprintf(esc_html__("Enter valid license key for %s"), $this->plugin_name), "error", [
                 "url"   => $this->license_setting_page,
                 "label" => esc_html__("Enter License Key"),
             ]);
